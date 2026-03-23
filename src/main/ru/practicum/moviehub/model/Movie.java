@@ -5,6 +5,7 @@ import ru.practicum.moviehub.exceptions.ValidationException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Movie {
     private int id;
@@ -48,5 +49,18 @@ public class Movie {
                 ", title='" + title + '\'' +
                 ", year=" + year +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Movie movie = (Movie) o;
+        return year == movie.year && Objects.equals(title, movie.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, year);
     }
 }

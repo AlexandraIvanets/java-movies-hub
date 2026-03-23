@@ -29,7 +29,7 @@ class MoviesHandler extends BaseHttpHandler {
         switch (endpoint) {
             case GET_MOVIES -> sendJson(ex, 200, getMoviesJson());
             case POST_MOVIES -> addMovie(ex);
-            case GET_MOVIE_BY_ID -> sendMovieById(ex);
+            case GET_MOVIE_BY_ID -> getMovieById(ex);
             case DELETE_MOVIE_BY_ID -> deleteMovieById(ex);
             case GET_MOVIES_BY_YEAR -> getMoviesByYear(ex);
             case UNKNOWN -> sendJson(ex, 405, gson.toJson(new ErrorResponse("Неподдерживаемый метод")));
@@ -94,7 +94,7 @@ class MoviesHandler extends BaseHttpHandler {
             String title = json.get("title").getAsString();
             int year = json.get("year").getAsInt();
 
-            Movie movie = store.saveMovie(title, year);
+            Movie movie = store.saveMovie(new Movie(title, year));
             sendJson(ex, 201, gson.toJson(movie));
 
         } catch (ValidationException e) {
@@ -113,7 +113,7 @@ class MoviesHandler extends BaseHttpHandler {
         return json.has(key) && !json.get(key).isJsonNull();
     }
 
-    private void sendMovieById(HttpExchange ex) throws IOException {
+    private void getMovieById(HttpExchange ex) throws IOException {
         try {
             int id = Integer.parseInt(ex.getRequestURI().getPath().split("/")[2]);
             Movie movie = store.getMovieByID(id).orElseThrow(() -> new NoSuchElementException("Фильм с id=" + id + " не найден"));

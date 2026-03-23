@@ -12,8 +12,7 @@ public class MoviesStore {
         this.store = new LinkedHashMap<>();
     }
 
-    public Movie saveMovie(String title, int year) {
-        Movie movie = new Movie(title, year);
+    public Movie saveMovie(Movie movie) {
         int id = ++nextId;
         movie.setId(id);
         store.put(id, movie);
